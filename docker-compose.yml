@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  snapclient:
+    build: containers/snapclient
+    devices:
+      - "/dev/snd/:/dev/snd/"
+    command: "snapclient -h 192.168.99.124 -s 15"
+    restart: always
+    environment: 
+      - STREAM_NAME=Mopidy

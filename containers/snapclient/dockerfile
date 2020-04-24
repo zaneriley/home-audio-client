@@ -1,0 +1,33 @@
+FROM ubuntu:18.04
+
+MAINTAINER Zane Riley <zaneriley@gmail.com>
+
+COPY snapclient_0.18.1-1_arm64.deb /snapclient_0.18.1-1_arm64.deb
+COPY libc6_2.29-0ubuntu2_arm64.deb /libc6_2.29-0ubuntu2_arm64.deb
+COPY libstdc++6_10-20200402-1_arm64.deb /libstdc++6_10-20200402-1_arm64.deb
+COPY libgcc-s1_10-20200402-1_arm64.deb /libgcc-s1_10-20200402-1_arm64.deb
+COPY gcc-10-base_10-20200402-1_arm64.deb /gcc-10-base_10-20200402-1_arm64.deb
+RUN set -ex \
+    # Official Mopidy install for Debian/Ubuntu along with some extensions
+    # (see https://docs.mopidy.com/en/latest/installation/debian/ )
+ && apt-get update \
+ && echo exit 0 > /usr/sbin/policy-rc.d \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        curl \
+        libasound2 \
+        libavahi-client3 \
+        libavahi-common3 \
+        libflac8 \
+        libogg0 \
+        libopus0 \
+        libvorbis0a \
+        libc6 \
+        libstdc++6 \
+ && apt-get -y install sudo \
+ && sudo apt-get install -y python3-distutils \
+ && curl -L https://bootstrap.pypa.io/get-pip.py | python3 - \
+ && DEBIAN_FRONTEND=noninteractive sudo dpkg -i /libc6_2.29-0ubuntu2_arm64.deb \
+ && DEBIAN_FRONTEND=noninteractive sudo dpkg -i /gcc-10-base_10-20200402-1_arm64.deb \
+ && DEBIAN_FRONTEND=noninteractive sudo dpkg -i /libgcc-s1_10-20200402-1_arm64.deb \
+ && DEBIAN_FRONTEND=noninteractive sudo dpkg -i /libstdc++6_10-20200402-1_arm64.deb \
+ && sudo dpkg -i /snapclient_0.18.1-1_arm64.deb 
